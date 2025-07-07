@@ -37,17 +37,9 @@ handle_git_with_branch()
     branch=$3
     if test -d $local_path
     then
-        (cd $local_path && git pull --rebase)
+        (cd $local_path && git fetch --depth 1 && git reset --hard FETCH_HEAD)
     else
-        if test "$shallow_clone" = "1"
-        then
-            git clone --depth 1 --branch $branch $GITBASE$remote_path $local_path
-        else
-            git clone $GITBASE$remote_path $local_path
-        fi
-        (cd $local_path &&
-             git checkout $branch &&
-             git branch --set-upstream-to origin/$branch)
+        git clone --depth 1 --branch $branch $GITBASE$remote_path $local_path
     fi
 }
 
@@ -57,14 +49,9 @@ handle_git()
     local_path=$2
     if test -d $local_path
     then
-        (cd $local_path && git pull --rebase)
+        (cd $local_path && git fetch --depth 1 && git reset --hard FETCH_HEAD)
     else
-        if test "$shallow_clone" = "1"
-        then
-            git clone --depth 1 $GITBASE$remote_path $local_path
-        else
-            git clone $GITBASE$remote_path $local_path
-        fi
+        git clone --depth 1 $GITBASE$remote_path $local_path
     fi
 }
 
